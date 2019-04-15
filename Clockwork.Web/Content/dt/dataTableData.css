@@ -1,0 +1,19 @@
+﻿.dataHighlightRed {
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+    padding: 5px 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    border-radius: 3px;
+}
+
+.dataHighlightYellow {
+    color: #000;
+    background-color: #ffff75;
+    border-color: #d43f3a;
+    padding: 5px 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    border-radius: 3px;
+}

@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = "Logs";
+}
+
+<h2>List of Client Logs</h2>
+<div class="box box-default hidden mt-5" id="tableContainer">
+    <div class="box-body table-responsive-md" id="DataTableWrapper">
+        <table class="table table-dark table-bordered table-hover" cellspacing="0" id="logsTable" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>IP Address</th>
+                    <th>Server Time</th>
+                    <th>Server Time (UTC)</th>
+                    <th>User Preferred Time</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#logsTable').DataTable({
+            destroy: true,
+            autoWidth: true,
+            scrollX: '100%',
+            deferRender: true,
+            dom: 'frtliBp',
+            ajax: {
+                type: 'GET',
+                url: '@ViewBag.Api' + 'list',
+                dataSrc: ''
+            },
+            columns: [
+                { data: 'id' },
+                { data: 'ipAddress' },
+                { data: 'timestamp' },
+                { data: 'timestamp_UTC' },
+                { data: 'preferredTimestamp' }
+            ],
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Export to Excel'
+                }
+            ],
+            order: [0, "asc"],
+            pageLength: 10,
+            paging: true
+        });
+        $('.dataTables_empty').html("No record found.");
+    });
+</script>

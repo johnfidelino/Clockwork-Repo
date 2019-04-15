@@ -1,0 +1,92 @@
+﻿
+@{
+    ViewBag.Title = "Time";
+}
+
+<h2 class="mb-5">Time Entry</h2>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="form-group form-inline col-md-12">
+
+            <label class="mr-1 col-md-2" for="defaultTimezone">Default Timezone</label>
+            <input class="form-control col-md-4 mr-md-2" type="text" id="defaultTimezone" value="@TimeZoneInfo.Local" readonly>
+            <label class="mr-3 col-md-2" for="defaultDateTime">Date & time</label>
+            <input class="form-control col-md-3 mr-md-2" type="text" id="defaultDateTime" readonly>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="form-group form-inline col-md-12">
+            <label class="mr-1 col-md-2" for="preferredTimezone">Preferred Timezone</label>
+            @Html.DropDownList("preferredTimezone", new SelectList((System.Collections.IEnumerable)ViewData["Timezones"], "Value", "Text"), "Please select", new { @class = "form-control col-md-4 mr-md-2" })
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Doesn't look good!
+            </div>
+            <label class="mr-3 col-md-2" for="defaultDateTime">Converted value</label>
+            <input class="form-control col-md-3 mr-md-2" type="text" id="preferredDateTime" name="preferredDateTime" readonly>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="form-group form-inline col-sm-12 justify-content-around">
+            <input id="btnTime" class="form-control btn-info col-md-4" type="button" value="Get time" />
+            <input id="btnConvert" class="form-control col-md-4" type="button" value="Convert" disabled />
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        let currentClientlog;
+        $('#btnTime').click(function (e) {
+            $.ajax({
+            url: '@ViewBag.Api' + 'time',
+            method: "GET"
+            })
+            .done(function (data) {
+                    currentClientlog = data;
+                $('#defaultDateTime').val(data.timestamp);
+            })
+            .fail(function (xhr) {
+                console.log('error', xhr);
+            });
+        });
+
+        $('#preferredTimezone').change(function () {
+            if ($('#preferredTimezone').val() != '') {
+                $(this).removeClass('required-field');
+                $('#btnConvert').prop('disabled', false);
+                $('#btnConvert').addClass('btn-primary');
+            }
+            else {
+                $(this).addClass('required-field');
+                $('#btnConvert').prop('disabled', true);
+                $('#btnConvert').removeClass('btn-primary');
+            }
+        });
+
+        $('#btnConvert').click(function (e) {
+            if ($('#preferredTimezone').val() === '') {
+                $('#preferredTimezone').addClass('required-field');
+                $('#btnConvert').prop('disabled', true);
+            }
+            else {
+                $.ajax({
+                    url: '@ViewBag.Api' + 'timezone',
+                    method: 'POST',
+                    data: {
+                        timezoneId: $('#preferredTimezone').val(),
+                        clientLog: currentClientlog
+                    }
+                })
+                    .done(function (data) {
+                        console.log(data)
+                        $('#preferredDateTime').val(data.preferredTimestamp);
+                    })
+                    .fail(function (xhr) {
+                        console.log('error', xhr);
+                    });
+            }
+        });
+    });
+</script>

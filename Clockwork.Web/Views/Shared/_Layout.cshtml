@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/datatables")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+</head>
+<body class="text-center">
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+        <header class="masthead mb-5">
+            <div class="inner">
+                <a class="masthead-brand nounderline" href="#">
+                    <img id="cw-image" src="~/Content/images/Clockwerk.png" alt="Clockwork" />
+                    <strong><em>CLOCKWORK</em></strong>
+                </a>
+                <nav class="nav nav-masthead justify-content-center">
+                    <a id="home" class="nav-link @Url.MakeActiveClass("Home")" href='@Url.Action("Index","Home")'>Home</a>
+                    <a id="time" class="nav-link @Url.MakeActiveClass("Time")" href='@Url.Action("Index","Time")'>Get Time</a>
+                    <a id="list" class="nav-link @Url.MakeActiveClass("Logs")" href='@Url.Action("Index","Logs")'>View List</a>
+                </nav>
+            </div>
+        </header>
+
+        @RenderBody()
+
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/datatables")
+        @RenderSection("Scripts", false)
+    </div>
+</body>
+</html>
